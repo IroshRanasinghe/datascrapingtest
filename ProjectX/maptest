@@ -1,0 +1,40 @@
+### Add position to Geohash
+###    Each hash mapping contains a list of points in the "block"
+###
+from base64 import encode
+
+
+def addToGeohash(m, latitude, longitude):
+    p = (latitude, longitude)
+    ph = encode(p[0], p[1], 5)
+    if ph not in m:
+        m[ph] = []
+    m[ph].append(p)
+    return
+
+
+### Get positions in same "block"   or empty list if none found
+###
+def getFromGeohash(m, latitude, longitude):
+    p = (latitude, longitude)
+    ph = encode(p[0], p[1], 5)
+    print("query hash: " + ph)
+    if ph in m:
+        return m[ph]
+    return []
+
+
+### Test
+m = dict()
+
+# Add 2 points in general area (1st near vista del mar)
+addToGeohash(m, 37.779914, -122.509431)
+addToGeohash(m, 37.780546, -122.366189)
+
+# Query a point 769 meters from vista del mar point
+n = getFromGeohash(m, 37.779642, -122.502993)
+
+print("Length of hashmap: " + str(len(m)))
+print("Contents of map  : " + str(m))
+print("Query result     : ")
+print(n)
